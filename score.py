@@ -4,6 +4,7 @@ from operator import itemgetter
 import databases
 from quart import Quart, g, request, jsonify, abort
 from quart_schema import validate_request, RequestSchemaValidationError, QuartSchema
+import redis
 
 
 app = Quart(__name__)
@@ -29,6 +30,16 @@ def unauthorized(e):
 @app.route("/add-score", methods=["POST"])
 @validate_request(scoreData)
 async def add_score(data):
+    r = redis.Redis(
+    host='127.0.0.1',
+    port=6379,
+    password='')
+
+    r.set('1', 'Joe')
+    r.set('2', 'Mama')
+    value = r.get('1')
+    print(value)
+
     return {"work1": "work1"}
 
 
