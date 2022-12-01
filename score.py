@@ -12,7 +12,7 @@ QuartSchema(app)
 
 @dataclasses.dataclass
 class scoreData:
-    gameId: str
+    username: str
     guesses: int
     win: bool
 
@@ -34,16 +34,48 @@ async def add_score(data):
     host='127.0.0.1',
     port=6379,
     password='')
+    # GLOABAL VARIABLES
+    table = 'leaderboard'
 
-    r.set('1', 'Joe')
-    r.set('2', 'Mama')
-    value = r.get('1')
-    print(value)
+    if (int(data.guesses) < 0 or int(data.guesses) > 6):
+        return {"Error": "Invalid Score"}, 401
 
-    return {"work1": "work1"}
+    scoreRange = [6,5,4,3,2,1,0]
+
+    if (r.exists(data.username) == 1):
+        score = scoreRange[6 - data.guesses]
+        r.zincrby(table, score, data.username)
+    else:
+        score = scoreRange[6 - data.guesses]
+        dict = {}
+        dict[data.username] = score
+        r.set(data.username, score)
+        r.zadd(table,dict)
+
+    return {"Success": "Added Score"}, 200
 
 
 #------------RETRIEVE TOP 10 SCORES-----------------#
+
 @app.route("/get-scores", methods=["GET"])
 async def get_scores():
-    return {"work": "work"}
+    r = redis.Redis(
+    host='127.0.0.1',
+    port=6379,
+    password='')
+    # GLOABAL VARIABLES
+    table = 'leaderboard'
+
+    output = []
+
+    top10data = r.zrevrange(table, 0, -1, withscores=True)
+
+    for i in range(len(top10data)):
+        name = top10data[i][0].decode()
+        if (i < 10):
+            output.append({"place": str(i + 1), "username": name, "score": str(top10data[i][1])})
+        else:
+            break;
+
+
+    return {"Top10leaderboard": output}, 200
