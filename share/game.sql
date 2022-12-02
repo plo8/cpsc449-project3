@@ -14881,7 +14881,8 @@ CREATE TABLE "game"(
 	guess3 VARCHAR(5) DEFAULT "", 
 	guess4 VARCHAR(5) DEFAULT "", 
 	guess5 VARCHAR(5) DEFAULT "", 
-	guess6 VARCHAR(5) DEFAULT "", 
+	guess6 VARCHAR(5) DEFAULT "",
+	won BIT DEFAULT 0,
     FOREIGN KEY(wordId) REFERENCES correct(id)
 );
 
