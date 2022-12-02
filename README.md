@@ -1,17 +1,17 @@
-# CPSC-449-Web Backend Engineering:Project-2
+# CPSC-449-Web Backend Engineering:Project-3
 
 Guided by Professor: Kenytt Avery @ProfAvery
 
 # Project Members:
 
-1. Debdyuti Das
-2. Janiece Garcia
+1. Janiece Garcia
+2. Josh Popp
 3. Peining Lo
-4. Sravani Kallmepudi
+4. Sean McCarthy
 
 # Project description: 
 
-This project is intented to effectively build a RESTful Web back-end API for a game which is similar to the very well known game "Wordle", with difference of few conditions or features from the original game. Some of these features which are included are letting more than one game to be played per day per player and as well as offering different games to different players.
+This project is intented to effectively build a RESTful Web back-end API for a game which is similar to the very well known game "Wordle", with difference of few conditions or features from the original game. Some of these features which are included are creating a new scoreboard service, and duplicating the game databaase to achieve read replication.
 
 In this project basically we are splitting monolith service that exposed two different sets of resources in project 1, into two separate microservices and authenticating the endpoints of each service as users-api and games-api, which makes use of Python's Quart web framework, and utilize 6 endpoints to allow an user to interact with the game. Th web services also makes use of NginX for HTTP Authentication, as well as load balancing.
 
@@ -27,22 +27,26 @@ sudo apt install --yes nginx-extras
 ```
 2. Clone the github repository:
 ```bash
-git clone https://github.com/plo8/cpsc449-project2.git
+git clone https://github.com/plo8/cpsc449-project3.git
 ```
-3. Then cd into the cpsc449-project2 folder and run the following commands:
+3. Then cd into the cpsc449-project3 folder and run the following commands:
 ```bash
-cd cpsc449-project2/
+cd cpsc449-project3/
 mkdir var
 ```
 4. Run both the init scripts to populate the database and automatically connect the api to the database. 
 ```bash
+./bin/init_litefs.sh
 ./bin/init_auth.sh    
-./bin/init_game.sh
 ````
 4. Start the services    
 ```bash
-foreman start -m auth=1,game=3  
+foreman start 
 ```
+5. Initialize the game database only on the first time running the program.
+```bash
+./bin/init_game.sh   
+````
     
 Now the API can be run using Postman(the method which we followed) or using curl or httpie.
 
