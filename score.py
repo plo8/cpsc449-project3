@@ -43,15 +43,18 @@ async def add_score(data):
     scoreRange = [6,5,4,3,2,1,0]
 
     if (r.exists(data.username) == 1):
-        if data.win == 0:
-            score = scoreRange[6]
+        if data.win == False:
+            score = 0
         else:
             score = scoreRange[5 - data.guesses]
         r.zincrby(table, score, data.username)
         r.incrby(data.username, 1)
         print(r.get(data.username))
     else:
-        score = scoreRange[5 - data.guesses]
+        if data.win == False:
+            score = 0
+        else:
+            score = scoreRange[5 - data.guesses]
         dict = {}
         dict[data.username] = score
         r.set(data.username, 1)
