@@ -13,7 +13,7 @@ Guided by Professor: Kenytt Avery @ProfAvery
 
 This project is intented to effectively build a RESTful Web back-end API for a game which is similar to the very well known game "Wordle", with difference of few conditions or features from the original game. Some of these features which are included are creating a new scoreboard service, and duplicating the game databaase to achieve read replication.
 
-In this project basically we are creating a new service for keeping a leaderboard, which makes use of Python's Quart web framework, and redis for data storage. This service is currently decoupled from the other services implemented in the first two projects.
+In this project we are creating a new service for keeping a leaderboard, which makes use of Python's Quart web framework, and redis for data storage. This service is currently decoupled from the other services implemented in the first two projects.
 
 In this project we also used litefs to replicate our database for the games service and implemented read replication. This utilized Python's Quart web framework, it also uses litefs for database replication, Python's itertools library to assist in read replication, NginX for load balancing, and as a proxy to handle authentication.  
 
