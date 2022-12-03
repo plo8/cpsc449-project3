@@ -44,16 +44,19 @@ async def add_score(data):
 
     if (r.exists(data.username) == 1):
         if data.win == 0:
-            score = scoreRange(6)
-        else:    
-            score = scoreRange[6 - data.guesses]
+            score = scoreRange[6]
+        else:
+            score = scoreRange[5 - data.guesses]
         r.zincrby(table, score, data.username)
+        r.incrby(data.username, 1)
+        print(r.get(data.username))
     else:
-        score = scoreRange[6 - data.guesses]
+        score = scoreRange[5 - data.guesses]
         dict = {}
         dict[data.username] = score
-        r.set(data.username, score)
+        r.set(data.username, 1)
         r.zadd(table,dict)
+        print(r.get(data.username))
 
     return {"Success": "Added Score"}, 200
 
@@ -70,13 +73,15 @@ async def get_scores():
     table = 'leaderboard'
 
     output = []
-
     top10data = r.zrevrange(table, 0, -1, withscores=True)
 
     for i in range(len(top10data)):
         name = top10data[i][0].decode()
+        num_of_games = r.get(name).decode()
+        finalScore = top10data[i][1]/int(num_of_games)
         if (i < 10):
-            output.append({"place": str(i + 1), "username": name, "score": str(top10data[i][1])})
+            r.get(name).decode()
+            output.append({"place": str(i + 1), "username": name, "score": str(round(finalScore, 2))})
         else:
             break;
 
